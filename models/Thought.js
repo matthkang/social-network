@@ -8,31 +8,26 @@ const thoughtSchema = new Schema(
         createdAt: [{
             type: Date,
             default: Date.now,
-            validate: {
-                validator: function (v) {
-                    return /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/.test(v);
-                },
-                message: props => `${props.value} is not a valid email!`
-            },
+            get: formatDate,
         }],
         username: [{ type: String, required: true }],
         reactions: [Reaction],
     },
     {
         toJSON: {
+            getters: true,
             virtuals: true,
         },
         id: false,
     }
 );
 
-// Create a virtual property `createdAt` that formats the timestamp on query
-thoughtSchema.virtual('createdAt').get(function () {
-    var date = this.createdAt;
+// Mongoose passes the raw value in MongoDB `createdAt` to the getter
+function formatDate(createdAt) {
     const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
-    const createdDate = date.toLocaleString('en-US', options);
-    return createdDate;
-});
+    const formattedDate = createdAt.toLocaleString('en-US', options);
+    return formattedDate;
+}
 
 // Create a virtual called reactionCount that retrieves the length of the thought's reactions array field on query
 thoughtSchema.virtual('reactionCount').get(function () {
