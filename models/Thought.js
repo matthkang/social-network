@@ -11,8 +11,7 @@ const thoughtSchema = new Schema(
             get: formatDate,
         },
         username: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
+            type: String, required: true,
         },
         reactions: [Reaction],
     },

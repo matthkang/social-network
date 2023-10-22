@@ -42,22 +42,22 @@ module.exports = {
     // Update a user by its id
     async updateUser(req, res) {
         try {
-          const user = await User.findOneAndUpdate(
-            { _id: req.params.userId },
-            { $set: req.body },
-            { runValidators: true, new: true }
-          );
-    
-          if (!user) {
-            return res.status(404).json({ message: 'No user with this id!' });
-          }
-    
-          res.json(user);
+            const user = await User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $set: req.body },
+                { runValidators: true, new: true }
+            );
+
+            if (!user) {
+                return res.status(404).json({ message: 'No user with this id!' });
+            }
+
+            res.json(user);
         } catch (err) {
-          console.log(err);
-          res.status(500).json(err);
+            console.log(err);
+            res.status(500).json(err);
         }
-      },
+    },
     // Remove a user by its id
     async deleteUser(req, res) {
         try {
@@ -67,20 +67,14 @@ module.exports = {
                 return res.status(404).json({ message: 'No such user exists' })
             }
 
-            // remove user's associated thoughts
-            const thoughts = await Thought.findOneAndUpdate(
-                { username: req.params.userId },
-                { $pull: { username: req.params.userId } },
-                { new: true }
-            );
-
-            if (!thoughts) {
-                return res.status(404).json({
-                    message: 'User deleted, but no thoughts found',
-                });
+            if (user.thoughts.length === 0){
+                console.log('User has no thoughts');
             }
-
-            res.json({ message: 'User successfully deleted' });
+            else {
+                await Thought.deleteMany({ _id: { $in: user.thoughts } });
+            }
+            
+            res.json({ message: 'User and associated thoughts successfully deleted' });
         } catch (err) {
             console.log(err);
             res.status(500).json(err);
