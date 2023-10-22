@@ -67,16 +67,55 @@ module.exports = {
                 return res.status(404).json({ message: 'No such user exists' })
             }
 
-            if (user.thoughts.length === 0){
+            if (user.thoughts.length === 0) {
                 console.log('User has no thoughts');
             }
             else {
                 await Thought.deleteMany({ _id: { $in: user.thoughts } });
             }
-            
+
             res.json({ message: 'User and associated thoughts successfully deleted' });
         } catch (err) {
             console.log(err);
+            res.status(500).json(err);
+        }
+    },
+
+    // add a new friend to a user's friend list
+    async addUsersFriend(req, res) {
+        try {
+            const user = await User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $addToSet: { friends: req.params.friendId } },
+                { runValidators: true, new: true }
+            );
+
+            if (!user) {
+                return res.status(404).json({ message: 'No user with this id!' });
+            }
+
+            res.json(user);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json(err);
+        }
+    },
+
+    // remove a friend from a user's friend list
+    async removeUsersFriend(req, res) {
+        try {
+            const user = await User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $pull: { friends: req.params.friendId } },
+                { runValidators: true, new: true }
+            )
+
+            if (!user) {
+                return res.status(404).json({ message: 'No user with this id!' });
+            }
+
+            res.json(user);
+        } catch (err) {
             res.status(500).json(err);
         }
     },
