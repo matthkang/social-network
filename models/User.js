@@ -3,8 +3,8 @@ const { Schema, model } = require('mongoose');
 // Schema to create User model
 const userSchema = new Schema(
     {
-        username: [{ type: String, unique: true, required: true, trim: true }],
-        email: [{
+        username: { type: String, unique: true, required: true, trim: true },
+        email: {
             type: String, 
             unique: true, 
             required: true, 
@@ -15,7 +15,7 @@ const userSchema = new Schema(
                 },
                 message: props => `${props.value} is not a valid email!`
             },
-        }],
+        },
         thoughts: [{ type: Schema.Types.ObjectId, ref: 'thought' }],
         friends: [{ type: Schema.Types.ObjectId, ref: 'user' }],
     },
@@ -23,7 +23,6 @@ const userSchema = new Schema(
         toJSON: {
             virtuals: true,
         },
-        id: false,
     }
 );
 

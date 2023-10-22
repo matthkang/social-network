@@ -4,13 +4,16 @@ const Reaction = require('./Reaction');
 // Schema to create Thought model
 const thoughtSchema = new Schema(
     {
-        thoughtText: [{ type: String, required: true, trim: true, minLength: 1, maxLength: 280 }],
-        createdAt: [{
+        thoughtText: { type: String, required: true, trim: true, minLength: 1, maxLength: 280 },
+        createdAt: {
             type: Date,
             default: Date.now,
             get: formatDate,
-        }],
-        username: [{ type: String, required: true }],
+        },
+        username: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        },
         reactions: [Reaction],
     },
     {
@@ -18,7 +21,6 @@ const thoughtSchema = new Schema(
             getters: true,
             virtuals: true,
         },
-        id: false,
     }
 );
 
