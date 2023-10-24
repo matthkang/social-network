@@ -26,8 +26,7 @@ const thoughtSchema = new Schema(
 // Mongoose passes the raw value in MongoDB `createdAt` to the getter
 function formatDate(createdAt) {
     const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
-    const formattedDate = createdAt.toLocaleString('en-US', options);
-    return formattedDate;
+    return createdAt.toLocaleString('en-US', options);
 }
 
 // Create a virtual called reactionCount that retrieves the length of the thought's reactions array field on query
