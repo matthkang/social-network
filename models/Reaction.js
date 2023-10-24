@@ -12,8 +12,8 @@ const reactionSchema = new Schema(
       maxlength: 280,
     },
     username: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     createdAt: {
       type: Date,
@@ -25,14 +25,14 @@ const reactionSchema = new Schema(
     toJSON: {
       getters: true,
     },
-    id: false,
+    _id: false,
   }
 );
 
 // Mongoose passes the raw value in MongoDB `createdAt` to the getter
 function formatDate(createdAt) {
-    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
-    return createdAt.toLocaleString('en-US', options);
+  const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+  return createdAt.toLocaleString('en-US', options);
 }
 
 module.exports = reactionSchema;

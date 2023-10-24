@@ -68,7 +68,7 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-    // Remove a user by its id
+    // Remove a thought by its id
     async deleteThought(req, res) {
         try {
             const thought = await Thought.findOneAndRemove({ _id: req.params.thoughtId });
